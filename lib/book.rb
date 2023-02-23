@@ -1,4 +1,5 @@
 require_relative 'author'
+
 class Book
   attr_accessor :title, :author
 
@@ -33,5 +34,3 @@ class Book
     Author.find(index)
   end
 end
-
-
