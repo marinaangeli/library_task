@@ -1,5 +1,6 @@
 require 'csv'
 require_relative 'author'
+require_relative 'reader'
 
 class Library
   attr_accessor :library_name
@@ -45,4 +46,14 @@ class Library
   def list_books
     Book.list_all_books(self.library_name)
   end
+
+  def create_reader(reader_name, email, city, street, house)
+    reader = Reader.new(reader_name, email, city, street, house, self.library_name)
+    reader.save
+  end
+
+  def list_readers
+    Reader.list_all_readers(self.library_name)
+  end
+
 end

@@ -4,13 +4,10 @@ class Author
   attr_accessor :id, :library_name
   attr_reader :author_name, :biography
 
-  # @@authors = []
-
   def initialize(author_name, biography = nil, library_name)
     @author_name = author_name
     @biography = biography
     @library_name = library_name
-    # @@authors << self
   end
 
   def save
