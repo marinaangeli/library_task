@@ -2,25 +2,30 @@ require 'csv'
 require_relative 'author'
 
 class Library
-  attr_accessor :name
+  attr_accessor :library_name
 
-  def initialize(name)
-    @name = name
+  def initialize(library_name)
+    @library_name = library_name
   end
 
   def save
     CSV.open("libraries.csv", "a+") do |csv|
-      csv << [name]
+      csv << [library_name]
     end
-    puts "Library #{self.name} created"
+    puts "Library #{self.library_name} created"
   end
 
-  def create_author(name, biography)
-    author = Author.new(name, biography, self.name)
+  def create_author(author_name, biography)
+    author = Author.new(author_name, biography, self.library_name)
     author.save
   end
 
   def list_authors
-    Author.list_all_authors(self.name)
+    Author.list_all_authors(self.library_name)
+  end
+
+  def create_book(title)
+    book = Book.new(title, self.library_name)
+    # author.save
   end
 end

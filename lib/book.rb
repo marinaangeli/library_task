@@ -3,12 +3,13 @@ require_relative 'author'
 class Book
   attr_accessor :title, :author
 
-  @@books = []
+  # @@books = []
 
-  def initialize(title)
+  def initialize(title, library_name)
     @title = title
-    @author = choose_author
-    @@books << self
+    @author_name = choose_author(library_name)
+    @library_name = library_name
+    # @@books << self
   end
 
   def self.list_books
@@ -27,10 +28,10 @@ class Book
 
   private
 
-  def choose_author
+  def choose_author(library_name)
     puts "Choose author"
-    Author.list_authors
+    Author.list_all_authors(library_name)
     index = gets.chomp.to_i - 1
-    Author.find(index)
+    author = Author.find(index, library_name)
   end
 end

@@ -2,12 +2,12 @@ require 'csv'
 
 class Author
   attr_accessor :id, :library_name
-  attr_reader :name, :biography
+  attr_reader :author_name, :biography
 
   # @@authors = []
 
-  def initialize(name, biography = nil, library_name)
-    @name = name
+  def initialize(author_name, biography = nil, library_name)
+    @author_name = author_name
     @biography = biography
     @library_name = library_name
     # @@authors << self
@@ -15,9 +15,9 @@ class Author
 
   def save
     CSV.open("authors.csv", "a+") do |csv|
-      csv << [name, biography, library_name]
+      csv << [author_name, biography, library_name]
     end
-    puts "#{self.name} - #{self.biography} created"
+    puts "#{self.author_name} - #{self.biography} created"
   end
 
   def self.all(library_name)
@@ -31,7 +31,7 @@ class Author
   def self.list_all_authors(library_name)
     authors = all(library_name)
     authors.each_with_index do |author, index|
-      puts "#{index + 1} - #{author.name}"
+      puts "#{index + 1} - #{author.author_name}"
     end
   end
 

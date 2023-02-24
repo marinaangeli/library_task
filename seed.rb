@@ -1,33 +1,17 @@
 require_relative 'lib/library'
 require_relative 'lib/author'
+require_relative 'lib/book'
 
 marina = Library.new('library_marina')
 marina.save
-marina.create_author('marina1', 'bio1')
-marina.create_author('marina2', 'bio2')
-puts "marina list:"
-marina.list_authors
-p marina.name
-
-ana = Library.new('library_ana')
-ana.save
-ana.create_author('ana1', 'bio1')
-ana.create_author('ana2', 'bio2')
-puts "ana list:"
-ana.list_authors
-p ana.name
-
-
-# require_relative 'lib/book'
-# require_relative 'lib/reader'
-# require_relative 'lib/order'
-
-# Author.new("author1", "bio1")
-# Author.new("author2", "bio2")
-
-# Book.new("title1")
-# Book.new("title2")
-
-# Reader.new("reader1", "email1", 'city1', "street1", "house1")
-
-# Order.new()
+marina.create_author('author_marina1', 'author_marina1bio1')
+marina.create_author('author_marina2', 'author_marina2bio2')
+book = marina.create_book("livro 1")
+p book
+# ana = Library.new('library_ana')
+# ana.save
+# ana.create_author('author_ana1', 'author_ana1bio1')
+# ana.create_author('author_ana2', 'author_ana2bio2')
+# puts "ana list:"
+# ana.list_authors
+# p ana.library_name
