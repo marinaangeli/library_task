@@ -3,27 +3,56 @@ require_relative 'reader'
 require 'date'
 
 class Order
-  attr_accessor :book, :reader, :date
+  attr_accessor :book_title, :reader_name, :date, :library_name
 
-  def initialize(date = Date.today)
-    @book = choose_book
-    @reader = choose_reader
+  def initialize(book, reader, date = Date.today, library_name)
+    @book_title = book
+    @reader_name = reader
     @date = date
+    @library_name = library_name
   end
 
-  private
+  def save
+    CSV.open("orders.csv", "a+") do |csv|
+      csv << [book_title, reader_name, date, library_name]
+    end
+    puts "Order placed: #{self.book_title} rented by #{self.reader_name} at #{self.date}"
+  end
 
-  def choose_book
+
+  def self.all(library_name)
+    orders = []
+    CSV.foreach("orders.csv") do |row|
+      orders << Order.new(row[0], row[1], row[2], row[3]) if row[3] == library_name
+    end
+    orders
+  end
+
+  def self.list_all_orders(library_name)
+    orders = Order.all(library_name)
+    orders.each_with_index do |order, index|
+      puts "#{index + 1} - #{order.book_title} rented by #{order.reader_name} on #{order.date}"
+    end
+  end
+
+  def self.find(index, library_name)
+    orders = all(library_name)
+    orders[index]
+  end
+
+  def self.choose_book(library_name)
     puts "Choose book"
-    Book.list_books
+    Book.list_all_books(library_name)
     index = gets.chomp.to_i - 1
-    Book.find(index)
+    book = Book.find(index, library_name)
+    book.title
   end
 
-  def choose_reader
+  def self.choose_reader(library_name)
     puts "Choose reader"
-    Reader.list_readers
+    Reader.list_all_readers(library_name)
     index = gets.chomp.to_i - 1
-    Reader.find(index)
+    reader = Reader.find(index, library_name)
+    reader.reader_name
   end
 end

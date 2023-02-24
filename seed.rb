@@ -1,6 +1,8 @@
 require_relative 'lib/library'
 require_relative 'lib/author'
 require_relative 'lib/book'
+require_relative 'lib/reader'
+require_relative 'lib/order'
 
 
 # marina = Library.new('library_marina')
@@ -23,4 +25,5 @@ puts "biblioteca escolhida: #{lista.library_name}"
 # puts "listando livros"
 # lista.list_books
 # lista.create_reader("reader_name", 'email', 'city', 'street', 50)
-lista.list_readers
+# lista.create_order
+lista.list_orders

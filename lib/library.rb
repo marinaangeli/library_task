@@ -1,6 +1,7 @@
 require 'csv'
 require_relative 'author'
 require_relative 'reader'
+require_relative 'order'
 
 class Library
   attr_accessor :library_name
@@ -54,6 +55,17 @@ class Library
 
   def list_readers
     Reader.list_all_readers(self.library_name)
+  end
+
+  def create_order(date = Date.today)
+    book = Order.choose_book(self.library_name)
+    reader = Order.choose_reader(self.library_name)
+    order = Order.new(book, reader, date, library_name)
+    order.save
+  end
+
+  def list_orders
+    Order.list_all_orders(self.library_name)
   end
 
 end

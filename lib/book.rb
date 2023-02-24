@@ -32,8 +32,9 @@ class Book
     end
   end
 
-  def self.find(index)
-    @@books[index]
+  def self.find(index, library_name)
+    books = all(library_name)
+    books[index]
   end
 
   def self.choose_author(library_name)
