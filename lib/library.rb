@@ -68,10 +68,11 @@ class Library
     Order.all(self.library_name)
   end
 
-  def list_top_books(n)
+  def list_top_books(n, print=true)
     books = retrieve_top(0)
-    books.first(n).each do |k,v|
-      puts "The book '#{k}' was rented #{v}x"
+    @top_books = books.first(n)
+    @top_books.each do |k,v|
+      puts "The book '#{k}' was rented #{v}x" if print
     end
   end
 
@@ -82,9 +83,18 @@ class Library
     end
   end
 
+  def top_books_renters(n=3)
+    list_top_books(n, false)
+    selected_orders = @all_orders.select do |order|
+      @top_books.flatten.include?(order[0])
+    end
+    selected_readers = selected_orders.map { |order| order[1] }
+    puts "#{selected_readers.uniq.count} unique readers ordered top #{n} books"
+  end
+
   def retrieve_top(y)
-    arr = Order.all(self.library_name)
-    simple_arr = arr.map {|a| a[y] }
+    @all_orders = Order.all(self.library_name)
+    simple_arr = @all_orders.map {|a| a[y] }
     new_arr = []
     unique = simple_arr.uniq
     unique.each do |e|

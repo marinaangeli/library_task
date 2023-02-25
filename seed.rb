@@ -44,5 +44,4 @@ lista = Library.choose_library
 # end
 
 # 7.times do lista.create_order end
-lista.list_top_books(2)
-lista.list_top_readers(3)
+lista.top_books_renters
