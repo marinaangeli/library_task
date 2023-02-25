@@ -11,15 +11,16 @@ class Library
   end
 
   def save
-    CSV.open("libraries.csv", "a+") do |csv|
+    CSV.open("storage/libraries.csv", "a+") do |csv|
       csv << [library_name]
     end
     puts "Library #{self.library_name} created"
   end
 
   def self.choose_library
+    puts "Choose a library"
     libraries = []
-    CSV.foreach("libraries.csv") do |row|
+    CSV.foreach("storage/libraries.csv") do |row|
       libraries << Library.new(row[0])
     end
     libraries.each_with_index do |library, index|
@@ -64,9 +65,6 @@ class Library
     order.save
   end
 
-  def list_orders
-    Order.all(self.library_name)
-  end
 
   def list_top_books(n, print=true)
     books = retrieve_top(0)
@@ -79,7 +77,7 @@ class Library
   def list_top_readers(n)
     readers = retrieve_top(1)
     readers.first(n).each do |k,v|
-      puts "The reader' #{k}' ordered #{v}x"
+      puts "The reader '#{k}' ordered #{v}x"
     end
   end
 
@@ -103,5 +101,4 @@ class Library
     end
     @new_arr = new_arr.sort_by {|k,v| v}.reverse!
   end
-
 end

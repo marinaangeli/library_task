@@ -11,7 +11,7 @@ class Author
   end
 
   def save
-    CSV.open("authors.csv", "a+") do |csv|
+    CSV.open("storage/authors.csv", "a+") do |csv|
       csv << [author_name, biography, library_name]
     end
     puts "#{self.author_name} - #{self.biography} created"
@@ -19,7 +19,7 @@ class Author
 
   def self.all(library_name)
     authors = []
-    CSV.foreach("authors.csv") do |row|
+    CSV.foreach("storage/authors.csv") do |row|
       authors << Author.new(row[0], row[1], row[2]) if row[2] == library_name
     end
     authors

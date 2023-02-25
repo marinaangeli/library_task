@@ -15,7 +15,7 @@ class Reader
   end
 
   def save
-    CSV.open("readers.csv", "a+") do |csv|
+    CSV.open("storage/readers.csv", "a+") do |csv|
       csv << [reader_name, email, city, street, house, library_name]
     end
     puts "Reader: #{self.reader_name} created"
@@ -23,7 +23,7 @@ class Reader
 
   def self.all(library_name)
     readers = []
-    CSV.foreach("readers.csv") do |row|
+    CSV.foreach("storage/readers.csv") do |row|
       readers << Reader.new(row[0], row[1], row[2], row[3], row[4], row[5]) if row[5] == library_name
     end
     readers

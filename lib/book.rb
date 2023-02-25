@@ -10,7 +10,7 @@ class Book
   end
 
   def save
-    CSV.open("books.csv", "a+") do |csv|
+    CSV.open("storage/books.csv", "a+") do |csv|
       csv << [title, author_name, library_name]
     end
     puts "#{self.title} by #{self.author_name} at #{self.library_name} library created"
@@ -19,7 +19,7 @@ class Book
 
   def self.all(library_name)
     books = []
-    CSV.foreach("books.csv") do |row|
+    CSV.foreach("storage/books.csv") do |row|
       books << Book.new(row[0], row[1], row[2]) if row[2] == library_name
     end
     books

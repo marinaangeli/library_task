@@ -3,36 +3,29 @@ require_relative 'reader'
 require 'date'
 
 class Order
-  attr_accessor :book_title, :reader_name, :date, :library_name
+  attr_accessor :book, :reader, :date, :library_name
 
-  def initialize(book_title, reader, date = Date.today, library_name)
-    @book_title = book
-    @reader_name = reader
+  def initialize(book, reader, date = Date.today, library_name)
+    @book = book
+    @reader = reader
     @date = date
     @library_name = library_name
   end
 
   def save
-    CSV.open("orders.csv", "a+") do |csv|
-      csv << [book_title, reader_name, date, library_name]
+    CSV.open("storage/orders.csv", "a+") do |csv|
+      csv << [book, reader, date, library_name]
     end
-    puts "Order placed: #{self.book_title} rented by #{self.reader_name} at #{self.date}"
+    puts "Order placed: #{self.book} rented by #{self.reader} at #{self.date}"
   end
 
 
   def self.all(library_name)
     orders = []
-    CSV.foreach("orders.csv") do |row|
+    CSV.foreach("storage/orders.csv") do |row|
       orders << [row[0], row[1]] if row[3] == library_name
     end
     orders
-  end
-
-  def self.list_all_orders(library_name)
-    orders = Order.all(library_name)
-    orders.each_with_index do |order, index|
-      puts "#{index + 1} - #{order.book_title} rented by #{order.reader_name} on #{order.date}"
-    end
   end
 
   def self.find(index, library_name)
