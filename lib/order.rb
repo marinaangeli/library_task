@@ -5,7 +5,7 @@ require 'date'
 class Order
   attr_accessor :book_title, :reader_name, :date, :library_name
 
-  def initialize(book, reader, date = Date.today, library_name)
+  def initialize(book_title, reader, date = Date.today, library_name)
     @book_title = book
     @reader_name = reader
     @date = date
@@ -23,7 +23,7 @@ class Order
   def self.all(library_name)
     orders = []
     CSV.foreach("orders.csv") do |row|
-      orders << Order.new(row[0], row[1], row[2], row[3]) if row[3] == library_name
+      orders << [row[0], row[1]] if row[3] == library_name
     end
     orders
   end

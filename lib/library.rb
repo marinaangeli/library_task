@@ -65,7 +65,33 @@ class Library
   end
 
   def list_orders
-    Order.list_all_orders(self.library_name)
+    Order.all(self.library_name)
+  end
+
+  def list_top_books(n)
+    books = retrieve_top(0)
+    books.first(n).each do |k,v|
+      puts "The book '#{k}' was rented #{v}x"
+    end
+  end
+
+  def list_top_readers(n)
+    readers = retrieve_top(1)
+    readers.first(n).each do |k,v|
+      puts "The reader' #{k}' ordered #{v}x"
+    end
+  end
+
+  def retrieve_top(y)
+    arr = Order.all(self.library_name)
+    simple_arr = arr.map {|a| a[y] }
+    new_arr = []
+    unique = simple_arr.uniq
+    unique.each do |e|
+      value = simple_arr.count(e)
+      new_arr << [e, value]
+    end
+    @new_arr = new_arr.sort_by {|k,v| v}.reverse!
   end
 
 end
