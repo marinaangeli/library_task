@@ -18,7 +18,7 @@ library = Library.choose_library
 library.create_author("author_name", "author_bio")
 
 # Creating a book
-library .create_book("book")1
+library .create_book("book")
 
 # Creating a Reader
 library.create_reader("reader_name","reader_email", "reader_city","reader_street", 100)
