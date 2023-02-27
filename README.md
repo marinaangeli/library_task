@@ -55,8 +55,8 @@ Code requirements met:
 - Ruby version must be persisted into the root of directory
 - All branches/commits/modules/classes/methods/variables/files should be named correctly
 - Project must have a hierarchy. Don't put all files in the root of the project.
-- Project must contain Gemfile/Gemfile.lock with installed Rubocop and Fasterer.
 
 For discussion:
+- Project must contain Gemfile/Gemfile.lock with installed Rubocop and Fasterer.
 - Project must have zero number of error/warnings after lintering!
 - Project must have Pull Request on Git repository opened
