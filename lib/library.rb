@@ -4,7 +4,7 @@ require_relative 'reader'
 require_relative 'order'
 
 class Library
-  attr_accessor :library_name
+  attr_reader :library_name
 
   def initialize(library_name)
     @library_name = library_name
@@ -14,7 +14,7 @@ class Library
     CSV.open("storage/libraries.csv", "a+") do |csv|
       csv << [library_name]
     end
-    puts "Library #{self.library_name} created"
+    puts "Library #{library_name} created"
   end
 
   def self.choose_library
@@ -69,8 +69,8 @@ class Library
   def list_top_books(n, print=true)
     books = retrieve_top(0)
     @top_books = books.first(n)
-    @top_books.each do |k,v|
-      puts "The book '#{k}' was rented #{v}x" if print
+    @top_books.each do |book,value|
+      puts "The book '#{book}' was rented #{value}x" if print
     end
   end
 

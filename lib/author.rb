@@ -1,13 +1,13 @@
 require 'csv'
 
 class Author
-  attr_accessor :id, :library_name
+  attr_accessor :library_name
   attr_reader :author_name, :biography
 
-  def initialize(author_name, biography = nil, library_name)
+  def initialize(author_name, library_name, biography = nil)
     @author_name = author_name
-    @biography = biography
     @library_name = library_name
+    @biography = biography
   end
 
   def save
@@ -20,7 +20,10 @@ class Author
   def self.all(library_name)
     authors = []
     CSV.foreach("storage/authors.csv") do |row|
-      authors << Author.new(row[0], row[1], row[2]) if row[2] == library_name
+      author_name = row[0]
+      library = row[1]
+      biography = row[2]
+      authors << Author.new(author_name, library, biography) if library == library_name
     end
     authors
   end

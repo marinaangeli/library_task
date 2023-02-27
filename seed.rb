@@ -16,14 +16,14 @@ library = Library.choose_library
 # Creating authors
 n = 1
 5.times do
-  lista.create_author("author_name#{n}", "author_bio#{n}")
+  library.create_author("author_name#{n}", "author_bio#{n}")
   n += 1
 end
 
 # # Creating books
 y = 1
 20.times do
-  lista .create_book("book#{y}")
+  library .create_book("book#{y}")
   y += 1
 end
 
@@ -31,11 +31,9 @@ end
 # Creating a Readers
 z = 1
 10.times do
-  lista.create_reader("reader_name#{z}","reader_email#{z}", "reader_city#{z}","reader_street#{z}", z)
+  library.create_reader("reader_name#{z}","reader_email#{z}", "reader_city#{z}","reader_street#{z}", z)
   z += 1
 end
 
 # Creating orders
-15.times do lista.create_order end
-
-
+15.times do library.create_order end
