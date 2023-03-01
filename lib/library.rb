@@ -1,4 +1,4 @@
-require 'csv'
+require 'spreadsheet'
 require_relative 'author'
 require_relative 'reader'
 require_relative 'order'
@@ -11,10 +11,19 @@ class Library
   end
 
   def save
-    CSV.open("storage/libraries.csv", "a+") do |csv|
-      csv << [library_name]
-    end
-    puts "Library #{library_name} created"
+    library_file = Spreadsheet::Workbook.new
+    library = library_file.create_worksheet :name => 'library_name'
+    library.row(0).concat %w{name}
+    library.row(1).push library_name
+    authors = library_file.create_worksheet :name => 'authors'
+    authors.row(0).concat %w{author_name biography library_name}
+    books = library_file.create_worksheet :name => 'books'
+    books.row(0).concat %w{book_title library_name}
+    readers = library_file.create_worksheet :name => 'readers'
+    readers.row(0).concat %w{reader_name email city street house library_name}
+    orders = library_file.create_worksheet :name => 'orders'
+    orders.row(0).concat %w{book reader date library_name}
+    library_file.write "storage/#{library_name}.xls"
   end
 
   def self.choose_library
