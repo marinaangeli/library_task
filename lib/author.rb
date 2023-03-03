@@ -38,9 +38,9 @@ class Author
 
   def self.list_all_authors(authors)
     authors.each_with_index do |author, index|
-      name = author[0]
+      reader_name = author[0]
       bio = author[1]
-      puts "#{index + 1} - #{name}: #{bio}"
+      puts "#{index + 1} - #{reader_name}: #{bio}"
     end
   end
 

@@ -1,7 +1,7 @@
 class Reader
   attr_accessor :reader_name, :email, :city, :street, :house, :library_name
 
-  def initialize(reader_name, email, city, street, house, library_name)
+  def initialize(reader_name, email, city, street, house, library_file)
     @reader_name = reader_name
     @email = email
     @city = city
@@ -11,33 +11,46 @@ class Reader
     else
       raise ArgumentError, "House must be positive number"
     end
-    @library_name = library_name
+    @library_file = library_file
   end
 
   def save
-    CSV.open("storage/readers.csv", "a+") do |csv|
-      csv << [reader_name, email, city, street, house, library_name]
-    end
-    puts "Reader: #{self.reader_name} created"
+    library = Spreadsheet.open(@library_file)
+    readers_sheet = library.worksheet 'readers'
+    row_index = readers_sheet.last_row_index + 1
+    readers_sheet.row(row_index).push reader_name, email, city, street, house
+    library.write @library_file
   end
 
-  def self.all(library_name)
-    readers = []
-    CSV.foreach("storage/readers.csv") do |row|
-      readers << Reader.new(row[0], row[1], row[2], row[3], row[4], row[5]) if row[5] == library_name
-    end
-    readers
+  def self.create(reader_name, email, city, street, house)
+    library_file = Library.choose_library
+    reader = new(reader_name, email, city, street, house, library_file)
+    reader.save
+    puts "#{reader_name.capitalize} created"
   end
 
-  def self.list_all_readers(library_name)
-    readers = all(library_name)
+  def self.all(library_file)
+    @readers = []
+    library = Spreadsheet.open(library_file)
+    readers_sheet = library.worksheet 'readers'
+    readers_sheet.each_with_index(1) do |row, index|
+      reader_name = row[0]
+      @readers << reader_name
+    end
+    @readers
+  end
+
+  def self.list_all_readers(readers)
     readers.each_with_index do |reader, index|
-      puts "#{index + 1} - #{reader.reader_name}"
+      puts "#{index + 1} - #{reader}"
     end
   end
 
-  def self.find(index, library_name)
-    readers = all(library_name)
-    readers[index]
+  def self.choose_reader(library_file)
+    readers = all(library_file)
+    puts "Choose reader number"
+    list_all_readers(readers)
+    index = gets.chomp.to_i - 1
+    @reader = readers[index]
   end
 end
