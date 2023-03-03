@@ -12,9 +12,6 @@ class Library
 
   def save
     library_file = Spreadsheet::Workbook.new
-    # library = library_file.create_worksheet :name => 'library_name'
-    # library.row(0).concat %w{name}
-    # library.row(1).push library_name
     authors = library_file.create_worksheet :name => 'authors'
     authors.row(0).concat %w{author_name biography}
     books = library_file.create_worksheet :name => 'books'
@@ -45,53 +42,29 @@ class Library
     end
     index = gets.chomp.to_i - 1
     selected_library = libraries[index]
-    # Open the selected workbook using the roo gem
     @library_file = File.join(directory_path, "#{selected_library}.xls")
   end
 
-  def create_book(title)
-    author = Book.choose_author(self.library_name)
-    book = Book.new(title, author, self.library_name)
-    book.save
-  end
-
-  def list_books
-    Book.list_all_books(self.library_name)
-  end
-
-  def create_reader(reader_name, email, city, street, house)
-    reader = Reader.new(reader_name, email, city, street, house, self.library_name)
-    reader.save
-  end
-
-  def list_readers
-    Reader.list_all_readers(self.library_name)
-  end
-
-  def create_order(date = Date.today)
-    book = Order.choose_book(self.library_name)
-    reader = Order.choose_reader(self.library_name)
-    order = Order.new(book, reader, date, library_name)
-    order.save
-  end
-
-
-  def list_top_books(n, print=true)
-    books = retrieve_top(0)
+  def self.list_top_books(n, print=true)
+    library_file = choose_library
+    # Passes 0 to only retrieve the book title
+    books = retrieve_top(0, library_file)
     @top_books = books.first(n)
     @top_books.each do |book,value|
       puts "The book '#{book}' was rented #{value}x" if print
     end
   end
 
-  def list_top_readers(n)
-    readers = retrieve_top(1)
-    readers.first(n).each do |k,v|
-      puts "The reader '#{k}' ordered #{v}x"
+  def self.list_top_readers(n)
+    library_file = choose_library
+    # Passes 1 to only retrieve the book title and reader name
+    readers = retrieve_top(1, library_file)
+    readers.first(n).each do |reader, orders|
+      puts "The reader '#{reader}' ordered #{orders}x"
     end
   end
 
-  def top_books_renters(n=3)
+  def self.top_books_renters(n=3)
     list_top_books(n, false)
     selected_orders = @all_orders.select do |order|
       @top_books.flatten.include?(order[0])
@@ -100,8 +73,8 @@ class Library
     puts "#{selected_readers.uniq.count} unique readers ordered top #{n} books"
   end
 
-  def retrieve_top(y)
-    @all_orders = Order.all(self.library_name)
+  def self.retrieve_top(y, library_file)
+    @all_orders = Order.all(library_file)
     simple_arr = @all_orders.map {|a| a[y] }
     new_arr = []
     unique = simple_arr.uniq
