@@ -1,47 +1,57 @@
 require_relative 'author'
+require 'spreadsheet'
 
 class Book
-  attr_accessor :title, :author_name, :library_name
+  attr_accessor :title, :author_name, :library_file
 
-  def initialize(title, author, library_name)
+  def initialize(title, author_name, library_file)
     @title = title
-    @author_name = author
-    @library_name = library_name
+    @author_name = author_name
+    @library_file = library_file
   end
 
   def save
-    CSV.open("storage/books.csv", "a+") do |csv|
-      csv << [title, author_name, library_name]
-    end
-    puts "#{self.title} by #{self.author_name} at #{self.library_name} library created"
+    library = Spreadsheet.open(library_file)
+    books_sheet = library.worksheet 'books'
+    row_index = books_sheet.last_row_index + 1
+    books_sheet.row(row_index).push title, author_name
+    library.write library_file
   end
 
-
-  def self.all(library_name)
-    books = []
-    CSV.foreach("storage/books.csv") do |row|
-      books << Book.new(row[0], row[1], row[2]) if row[2] == library_name
-    end
-    books
+  def self.create(title)
+    library_file = Library.choose_library
+    author_name = Author.choose_author(library_file)
+    book = new(title, author_name, library_file)
+    book.save
+    puts "#{book.title} by #{author_name} created"
   end
 
-  def self.list_all_books(library_name)
-    books = Book.all(library_name)
+  def self.all(library_file)
+    @books = []
+    library = Spreadsheet.open(library_file)
+    books_sheet = library.worksheet 'books'
+    books_sheet.each_with_index(1) do |row, index|
+      book_name = row[0]
+      author = row[1]
+      @books << [book_name, author]
+    end
+    @books
+  end
+
+  def self.list_all_books(books)
     books.each_with_index do |book, index|
-      puts "#{index + 1} - #{book.title} - #{book.author_name}"
+      title = book[0]
+      author = book[1]
+      puts "#{index + 1} - #{title} by #{author}"
     end
   end
 
-  def self.find(index, library_name)
-    books = all(library_name)
-    books[index]
-  end
-
-  def self.choose_author(library_name)
-    puts "Choose author"
-    Author.list_all_authors(library_name)
+  def self.choose_book(library_name)
+    books = Book.all(library_name)
+    puts "Choose book"
+    list_all_books(books)
     index = gets.chomp.to_i - 1
-    author = Author.find(index, library_name)
-    author.author_name
+    book = books[index]
+    p @book_title = book[0]
   end
 end

@@ -18,9 +18,9 @@ require_relative 'lib/author.rb'
 # sheet1.row(3).insert 1, 'Unknown'
 # sheet1.update_row 4, 'Hannes Wyss', 'Switzerland', 'Author'
 # book.write 'excel-file.xls'
-library = Library.choose_library
-# library.create_author("author2", library, "bio2")
-Author.find(1, library)
+# library = Library.choose_library
+# Author.choose_author(library)
+# Author.find(1, library)
 
 # book = Spreadsheet.open 'excel-file.xls'
 # sheet = book.worksheet 'My First Worksheet'
@@ -35,3 +35,5 @@ Author.find(1, library)
 # acknowledgement = "cool"
 # sheet.row(row_index).replace [name, country, acknowledgement]
 # book.write 'excel-file.xls'
+library = Library.choose_library
+Book.choose_book(library)

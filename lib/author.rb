@@ -15,18 +15,16 @@ class Author
     row_index = authors_sheet.last_row_index + 1
     authors_sheet.row(row_index).push author_name, biography
     library.write library_file
-    # CSV.open("storage/authors.csv", "a+") do |csv|
-    #   csv << [author_name, biography, library_name]
-    # end
-    # puts "#{self.author_name} - #{self.biography} created"
   end
 
-  def self.create(author_name, library_file, biography = nil)
+  def self.create(author_name, biography = nil)
+    library_file = Library.choose_library
     author = new(author_name, library_file, biography)
     author.save
+    puts "#{author_name} - #{biography} created"
   end
 
-  def self.all(library_file)
+  def self.alls(library_file)
     @authors = []
     library = Spreadsheet.open(library_file)
     authors_sheet = library.worksheet 'authors'
@@ -37,15 +35,19 @@ class Author
     @authors
   end
 
-  def self.list_all_authors(library_file)
-    authors = all(library_file)
+  def self.list_all_authors(authors)
     authors.each_with_index do |author, index|
-      puts "#{index + 1} - #{author}"
+      name = author[0]
+      bio = author[1]
+      puts "#{index + 1} - #{name} by #{bio}"
     end
   end
 
-  def self.find(index, library_file)
+  def self.choose_author(library_file)
     authors = all(library_file)
-    p authors[index]
+    puts "Choose author number"
+    list_all_authors(books)
+    index = gets.chomp.to_i - 1
+    @author = authors[index]
   end
 end
