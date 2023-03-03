@@ -12,40 +12,41 @@ class Library
 
   def save
     library_file = Spreadsheet::Workbook.new
-    library = library_file.create_worksheet :name => 'library_name'
-    library.row(0).concat %w{name}
-    library.row(1).push library_name
+    # library = library_file.create_worksheet :name => 'library_name'
+    # library.row(0).concat %w{name}
+    # library.row(1).push library_name
     authors = library_file.create_worksheet :name => 'authors'
-    authors.row(0).concat %w{author_name biography library_name}
+    authors.row(0).concat %w{author_name biography}
     books = library_file.create_worksheet :name => 'books'
-    books.row(0).concat %w{book_title library_name}
+    books.row(0).concat %w{book_title}
     readers = library_file.create_worksheet :name => 'readers'
-    readers.row(0).concat %w{reader_name email city street house library_name}
+    readers.row(0).concat %w{reader_name email city street house}
     orders = library_file.create_worksheet :name => 'orders'
-    orders.row(0).concat %w{book reader date library_name}
-    library_file.write "storage/#{library_name}.xls"
+    orders.row(0).concat %w{book reader date}
+    file_path = "storage/#{library_name}.xls"
+    library_file.write file_path
+  end
+
+  def self.create(library_name)
+    library = new(library_name)
+    library.save
   end
 
   def self.choose_library
-    puts "Choose a library"
     libraries = []
-    CSV.foreach("storage/libraries.csv") do |row|
-      libraries << Library.new(row[0])
+    directory_path = "storage"
+    Dir.glob(File.join(directory_path, "*.xls")).each do |file_path|
+      library_name = File.basename(file_path, ".xls")
+      libraries << library_name
     end
+    puts "Enter the number of the library you want to select:"
     libraries.each_with_index do |library, index|
-      puts "#{index + 1} - #{library.library_name}"
+      puts "#{index + 1} - #{library}"
     end
     index = gets.chomp.to_i - 1
-    library = libraries[index]
-  end
-
-  def create_author(author_name, biography)
-    author = Author.new(author_name, biography, self.library_name)
-    author.save
-  end
-
-  def list_authors
-    Author.list_all_authors(self.library_name)
+    selected_library = libraries[index]
+    # Open the selected workbook using the roo gem
+    @library_file = File.join(directory_path, "#{selected_library}.xls")
   end
 
   def create_book(title)
