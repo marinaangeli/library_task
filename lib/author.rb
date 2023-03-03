@@ -24,13 +24,14 @@ class Author
     puts "#{author_name} - #{biography} created"
   end
 
-  def self.alls(library_file)
+  def self.all(library_file)
     @authors = []
     library = Spreadsheet.open(library_file)
     authors_sheet = library.worksheet 'authors'
     authors_sheet.each_with_index(1) do |row, index|
       author_name = row[0]
-      @authors << author_name
+      biography = row[1]
+      @authors << [author_name, biography]
     end
     @authors
   end
@@ -39,14 +40,14 @@ class Author
     authors.each_with_index do |author, index|
       name = author[0]
       bio = author[1]
-      puts "#{index + 1} - #{name} by #{bio}"
+      puts "#{index + 1} - #{name}: #{bio}"
     end
   end
 
   def self.choose_author(library_file)
     authors = all(library_file)
     puts "Choose author number"
-    list_all_authors(books)
+    list_all_authors(authors)
     index = gets.chomp.to_i - 1
     @author = authors[index]
   end

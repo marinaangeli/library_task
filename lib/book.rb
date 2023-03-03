@@ -2,7 +2,7 @@ require_relative 'author'
 require 'spreadsheet'
 
 class Book
-  attr_accessor :title, :author_name, :library_file
+  attr_reader :title, :author_name, :library_file
 
   def initialize(title, author_name, library_file)
     @title = title
@@ -20,8 +20,8 @@ class Book
 
   def self.create(title)
     library_file = Library.choose_library
-    author_name = Author.choose_author(library_file)
-    book = new(title, author_name, library_file)
+    author_name = Author.choose_author(library_file)[0]
+    puts "author_name}"   book = new(title, author_name, library_file)
     book.save
     puts "#{book.title} by #{author_name} created"
   end
