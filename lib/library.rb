@@ -25,6 +25,7 @@ class Library
   end
 
   def self.create(library_name)
+    library_name = library_name.to_s.downcase.gsub(/\s/, '_')
     library = new(library_name)
     library.save
   end

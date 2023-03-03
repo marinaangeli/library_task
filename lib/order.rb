@@ -16,7 +16,7 @@ class Order
     library = Spreadsheet.open(library_file)
     order_sheet = library.worksheet 'orders'
     row_index = order_sheet.last_row_index + 1
-    order_sheet.row(row_index).push book, reader
+    order_sheet.row(row_index).push book, reader, date
     library.write library_file
   end
 

@@ -7,25 +7,19 @@ require_relative 'lib/order'
 
 
 # Creating a Library:
-library = Library.new('library_marina')
-library.save
-
-
-# Choosing a library
-library = Library.choose_library
+Library.create('Library Name')
 
 # Creating an author
-library.create_author("author_name", "author_bio")
+Author.create("Author Name", "Biography")
 
 # Creating a book
-library .create_book("book")
+Book.create("Book Title")
 
 # Creating a Reader
-library.create_reader("reader_name","reader_email", "reader_city","reader_street", 100)
-
+Reader.create("Reader Name","Email", "City","Street", 100)
 
 # Creating an order
-library.create_order
+Order.create
 
 # List top n readers
 library.list_top_readers(4)
