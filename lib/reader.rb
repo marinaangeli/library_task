@@ -20,6 +20,7 @@ class Reader
     row_index = readers_sheet.last_row_index + 1
     readers_sheet.row(row_index).push reader_name, email, city, street, house
     library.write @library_file
+    # I don't know why it was only working with @library_file for reader, and for the other it was ok
   end
 
   def self.create(reader_name, email, city, street, house)

@@ -8,4 +8,4 @@ require_relative 'lib/reader.rb'
 
 # Reader.create("reader_nameA","reader_email", "reader_city","reader_street", 100)
 library = Library.choose_library
-Reader.choose_reader(library)
+Order.all(library)
