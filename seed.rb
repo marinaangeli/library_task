@@ -4,36 +4,25 @@ require_relative 'lib/book'
 require_relative 'lib/reader'
 require_relative 'lib/order'
 
+# # create library
+Library.create('my_library')
 
-
-marina = Library.new('library_marina')
-marina.save
-
-
-# Choosing a library
-library = Library.choose_library
-
-# Creating authors
-n = 1
-5.times do
-  library.create_author("author_name#{n}", "author_bio#{n}")
-  n += 1
+# # create authors
+10.times do |i|
+  Author.create("Author #{i+1}", "Biography #{i+1}")
 end
 
-# # Creating books
-y = 1
-20.times do
-  library .create_book("book#{y}")
-  y += 1
+# # # create books
+15.times do |i|
+  Book.create("Book #{i+1}")
 end
 
-
-# Creating a Readers
-z = 1
-10.times do
-  library.create_reader("reader_name#{z}","reader_email#{z}", "reader_city#{z}","reader_street#{z}", z)
-  z += 1
+# # create readers
+10.times do |i|
+  Reader.create("Reader #{i+1}", "reader#{i+1}@example.com", "City #{i+1}", "Street #{i+1}", "#{i+1}")
 end
 
-# Creating orders
-15.times do library.create_order end
+# create orders
+30.times do
+  Order.create
+end

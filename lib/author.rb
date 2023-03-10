@@ -1,43 +1,54 @@
-require 'csv'
+require 'spreadsheet'
 
 class Author
-  attr_accessor :library_name
-  attr_reader :author_name, :biography
+  attr_accessor :library_file, :author_name, :biography
 
-  def initialize(author_name, library_name, biography = nil)
+  def initialize(author_name, library_file, biography = nil)
     @author_name = author_name
-    @library_name = library_name
+    @library_file = library_file
     @biography = biography
   end
 
   def save
-    CSV.open("storage/authors.csv", "a+") do |csv|
-      csv << [author_name, biography, library_name]
-    end
-    puts "#{self.author_name} - #{self.biography} created"
+    library = Spreadsheet.open(library_file)
+    authors_sheet = library.worksheet 'authors'
+    row_index = authors_sheet.last_row_index + 1
+    authors_sheet.row(row_index).push author_name, biography
+    library.write library_file
   end
 
-  def self.all(library_name)
-    authors = []
-    CSV.foreach("storage/authors.csv") do |row|
+  def self.create(author_name, biography = nil)
+    library_file = Library.choose_library
+    author = new(author_name, library_file, biography)
+    author.save
+    puts "#{author_name} - #{biography} created"
+  end
+
+  def self.all(library_file)
+    @authors = []
+    library = Spreadsheet.open(library_file)
+    authors_sheet = library.worksheet 'authors'
+    authors_sheet.each_with_index(1) do |row, index|
       author_name = row[0]
-      library = row[1]
-      biography = row[2]
-      authors << Author.new(author_name, library, biography) if library == library_name
+      biography = row[1]
+      @authors << [author_name, biography]
     end
-    authors
+    @authors
   end
 
-  def self.list_all_authors(library_name)
-    authors = all(library_name)
+  def self.list_all_authors(authors)
     authors.each_with_index do |author, index|
-      puts "#{index + 1} - #{author.author_name}"
+      reader_name = author[0]
+      bio = author[1]
+      puts "#{index + 1} - #{reader_name}: #{bio}"
     end
   end
 
-  def self.find(index, library_name)
-    authors = all(library_name)
-    authors[index]
+  def self.choose_author(library_file)
+    authors = all(library_file)
+    puts "Choose author number"
+    list_all_authors(authors)
+    index = gets.chomp.to_i - 1
+    @author = authors[index]
   end
-
 end
